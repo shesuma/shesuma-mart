@@ -1,0 +1,851 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard | ShesumaMart</title>
+
+<style>
+:root {
+    --green: #28784b;
+    --dark-green: #1d5938;
+    --orange: #e28b28;
+    --bg: #f5f8f5;
+    --text: #24352a;
+    --muted: #718074;
+    --white: #fff;
+    --border: #e3ebe4;
+    --red: #d94343;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 245px;
+    background: #173e2a;
+    color: white;
+    padding: 25px 17px;
+    flex-shrink: 0;
+}
+
+.logo {
+    display: block;
+    text-decoration: none;
+    color: white;
+    font-size: 24px;
+    font-weight: 800;
+    padding: 5px 10px 30px;
+}
+
+.logo span {
+    color: #f0a448;
+}
+
+.sidebar-label {
+    color: #a9c5b2;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    padding: 12px 10px;
+}
+
+.sidebar a.menu-link {
+    display: block;
+    text-decoration: none;
+    color: #e1ece4;
+    padding: 13px 12px;
+    border-radius: 9px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    transition: .2s;
+}
+
+.sidebar a.menu-link:hover,
+.sidebar a.menu-link.active {
+    background: #28784b;
+    color: white;
+}
+
+.sidebar-bottom {
+    margin-top: 35px;
+    border-top: 1px solid #3a6048;
+    padding-top: 17px;
+}
+
+.main {
+    flex: 1;
+    min-width: 0;
+}
+
+.topbar {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    padding: 20px 4%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.topbar h1 {
+    font-size: 24px;
+}
+
+.topbar p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+.admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.avatar {
+    background: #e4f2e6;
+    color: var(--green);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+}
+
+.admin-profile strong {
+    display: block;
+    font-size: 14px;
+}
+
+.admin-profile small {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.content {
+    padding: 28px 4%;
+    max-width: 1500px;
+    margin: auto;
+}
+
+.welcome {
+    background: linear-gradient(120deg, #28784b, #1d5938);
+    color: white;
+    padding: 27px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.welcome h2 {
+    font-size: 23px;
+    margin-bottom: 9px;
+}
+
+.welcome p {
+    color: #e2f0e5;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.welcome-icon {
+    font-size: 58px;
+}
+
+.section-title {
+    font-size: 19px;
+    margin-bottom: 17px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 17px;
+    margin-bottom: 28px;
+}
+
+.stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 20px;
+    min-width: 0;
+}
+
+.stat-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 17px;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.stat-icon {
+    width: 39px;
+    height: 39px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    background: #edf7ee;
+}
+
+.stat-value {
+    font-size: 26px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.stat-note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 9px;
+}
+
+.two-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(240px, 1fr);
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.panel {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 22px;
+    min-width: 0;
+}
+
+.panel-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.panel-heading h3 {
+    font-size: 17px;
+}
+
+.panel-heading a {
+    color: var(--green);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    text-align: left;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 12px 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+td {
+    font-size: 13px;
+    padding: 14px 8px;
+    border-bottom: 1px solid #eef2ee;
+    overflow-wrap: anywhere;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.status {
+    display: inline-block;
+    padding: 6px 9px;
+    border-radius: 20px;
+    background: #eaf7ed;
+    color: #28784b;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.status.cancelled {
+    background: #fff0f0;
+    color: #b72f2f;
+}
+
+.status.delivered {
+    background: #eaf1ff;
+    color: #315ca8;
+}
+
+.empty-row {
+    color: var(--muted);
+    text-align: center;
+    padding: 25px 10px;
+}
+
+.quick-links {
+    display: grid;
+    gap: 12px;
+}
+
+.quick-link {
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: .2s;
+}
+
+.quick-link:hover {
+    border-color: var(--green);
+    background: #f6fbf6;
+}
+
+.quick-icon {
+    width: 41px;
+    height: 41px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: #edf7ee;
+    font-size: 21px;
+    flex-shrink: 0;
+}
+
+.quick-link strong {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.quick-link small {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 13px;
+}
+
+.product-mini {
+    border: 1px solid var(--border);
+    padding: 15px;
+    border-radius: 11px;
+}
+
+.product-mini .emoji {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.product-mini strong {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 7px;
+    overflow-wrap: anywhere;
+}
+
+.product-mini small {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.refresh-btn {
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--green);
+    border-radius: 8px;
+    padding: 9px 13px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+footer {
+    text-align: center;
+    padding: 22px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+@media (max-width: 1100px) {
+    .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .two-columns {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .layout {
+        display: block;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 12px;
+    }
+
+    .logo {
+        padding: 8px 8px 15px;
+    }
+
+    .sidebar-label,
+    .sidebar-bottom {
+        display: none;
+    }
+
+    .sidebar nav {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .sidebar a.menu-link {
+        padding: 10px;
+        margin: 0;
+        font-size: 12px;
+    }
+
+    .topbar {
+        padding: 17px 5%;
+    }
+
+    .content {
+        padding: 20px 4%;
+    }
+
+    .welcome {
+        padding: 20px;
+    }
+
+    .welcome h2 {
+        font-size: 20px;
+    }
+
+    .welcome-icon {
+        font-size: 42px;
+    }
+
+    .stat-card {
+        padding: 15px;
+    }
+
+    .stat-value {
+        font-size: 22px;
+    }
+
+    .panel {
+        padding: 15px;
+    }
+
+    .product-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .table-wrap {
+        overflow-x: auto;
+    }
+
+    table {
+        min-width: 480px;
+    }
+}
+
+@media (max-width: 380px) {
+    .stats {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <a class="logo" href="index.html">Shesuma<span>Mart</span></a>
+
+        <div class="sidebar-label">Main Menu</div>
+
+        <nav>
+            <a class="menu-link active" href="dashboard.html">📊 Dashboard</a>
+            <a class="menu-link" href="product.html">🛒 Products</a>
+            <a class="menu-link" href="seller.html">📦 Seller Products</a>
+            <a class="menu-link" href="orders.html">🧾 Orders</a>
+            <a class="menu-link" href="cart.html">🛍️ Shopping Cart</a>
+            <a class="menu-link" href="admin.html">⚙️ Admin Panel</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a class="menu-link" href="index.html">🏠 Visit Store</a>
+            <a class="menu-link" href="login.html">🔐 Login</a>
+        </div>
+    </aside>
+
+    <div class="main">
+
+        <header class="topbar">
+            <div>
+                <h1>Dashboard</h1>
+                <p>Manage your grocery store at a glance.</p>
+            </div>
+
+            <div class="admin-profile">
+                <div class="avatar">SM</div>
+                <div>
+                    <strong>ShesumaMart</strong>
+                    <small>Store Dashboard</small>
+                </div>
+            </div>
+        </header>
+
+        <main class="content">
+
+            <section class="welcome">
+                <div>
+                    <h2>Welcome to ShesumaMart! 🌿</h2>
+                    <p>Track your demo orders, review grocery products<br>
+                    and manage your store from one place.</p>
+                </div>
+                <div class="welcome-icon">🛒</div>
+            </section>
+
+            <h2 class="section-title">Store Overview</h2>
+
+            <section class="stats">
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Total Products</span>
+                        <span class="stat-icon">🥬</span>
+                    </div>
+                    <div class="stat-value" id="totalProducts">60</div>
+                    <div class="stat-note">Products listed in the demo catalogue</div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Total Orders</span>
+                        <span class="stat-icon">🧾</span>
+                    </div>
+                    <div class="stat-value" id="totalOrders">0</div>
+                    <div class="stat-note">Orders saved in this browser</div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Order Revenue</span>
+                        <span class="stat-icon">💰</span>
+                    </div>
+                    <div class="stat-value" id="totalRevenue">₹0</div>
+                    <div class="stat-note">Sum of saved demo order totals</div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Cart Items</span>
+                        <span class="stat-icon">🛍️</span>
+                    </div>
+                    <div class="stat-value" id="cartItems">0</div>
+                    <div class="stat-note">Quantity currently in your cart</div>
+                </article>
+            </section>
+
+            <section class="two-columns">
+
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3>Recent Orders</h3>
+                        <a href="orders.html">View all →</a>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Date</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentOrders">
+                                <tr>
+                                    <td colspan="4" class="empty-row">
+                                        No orders yet. Place a demo order to see it here.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3>Quick Actions</h3>
+                    </div>
+
+                    <div class="quick-links">
+                        <a class="quick-link" href="product.html">
+                            <span class="quick-icon">🥦</span>
+                            <span>
+                                <strong>Browse Groceries</strong>
+                                <small>Explore the product catalogue</small>
+                            </span>
+                        </a>
+
+                        <a class="quick-link" href="seller.html">
+                            <span class="quick-icon">➕</span>
+                            <span>
+                                <strong>Add a Product</strong>
+                                <small>Add a demo grocery item</small>
+                            </span>
+                        </a>
+
+                        <a class="quick-link" href="cart.html">
+                            <span class="quick-icon">🛒</span>
+                            <span>
+                                <strong>Open Shopping Cart</strong>
+                                <small>Review items and place an order</small>
+                            </span>
+                        </a>
+
+                        <a class="quick-link" href="admin.html">
+                            <span class="quick-icon">⚙️</span>
+                            <span>
+                                <strong>Manage Products</strong>
+                                <small>Review seller demo products</small>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+
+            </section>
+
+            <section class="panel">
+                <div class="panel-heading">
+                    <h3>Seller Added Products</h3>
+                    <a href="seller.html">Manage products →</a>
+                </div>
+
+                <div id="sellerProducts" class="product-list">
+                    <p class="stat-note">No seller-added products yet.</p>
+                </div>
+            </section>
+
+            <div style="display:flex;justify-content:flex-end;margin-top:18px;">
+                <button class="refresh-btn" onclick="loadDashboard()">
+                    ↻ Refresh Dashboard
+                </button>
+            </div>
+
+        </main>
+
+        <footer>
+            © 2026 ShesumaMart · Fresh groceries for your family.
+        </footer>
+
+    </div>
+</div>
+
+<script>
+const ORDERS_KEY = "shesumaMartOrders";
+const CART_KEY = "shesumaMartCart";
+const SELLER_KEY = "shesumaMartSellerProducts";
+
+function readArray(key) {
+    try {
+        const data = JSON.parse(localStorage.getItem(key) || "[]");
+        return Array.isArray(data) ? data : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
+
+function money(value) {
+    const amount = Number(value || 0);
+    return "₹" + (Number.isFinite(amount) ? amount : 0).toLocaleString("en-IN", {
+        maximumFractionDigits: 2
+    });
+}
+
+function formatDate(value) {
+    if (!value) return "—";
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "—";
+
+    return date.toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    });
+}
+
+function getOrderTotal(order) {
+    if (Number.isFinite(Number(order.total))) {
+        return Number(order.total);
+    }
+
+    if (Number.isFinite(Number(order.totalAmount))) {
+        return Number(order.totalAmount);
+    }
+
+    const items = Array.isArray(order.items) ? order.items : [];
+
+    return items.reduce((sum, item) => {
+        return sum + Number(item.price || 0) * Number(item.quantity || 1);
+    }, 0);
+}
+
+function getStatusClass(status) {
+    const normalized = String(status || "Placed").toLowerCase();
+
+    if (normalized === "cancelled") return "cancelled";
+    if (normalized === "delivered") return "delivered";
+
+    return "";
+}
+
+function loadDashboard() {
+    const orders = readArray(ORDERS_KEY);
+    const cart = readArray(CART_KEY);
+    const sellerProducts = readArray(SELLER_KEY);
+
+    // Count products from the product page's built-in demo catalogue.
+    // Seller-added products are shown separately below.
+    document.getElementById("totalProducts").textContent = 60;
+
+    document.getElementById("totalOrders").textContent = orders.length;
+
+    const revenue = orders
+        .filter(order => String(order.status || "").toLowerCase() !== "cancelled")
+        .reduce((sum, order) => sum + getOrderTotal(order), 0);
+
+    document.getElementById("totalRevenue").textContent = money(revenue);
+
+    const cartQuantity = cart.reduce((sum, item) => {
+        const quantity = Number(item.quantity || 1);
+        return sum + (Number.isFinite(quantity) && quantity > 0 ? quantity : 1);
+    }, 0);
+
+    document.getElementById("cartItems").textContent = cartQuantity;
+
+    renderRecentOrders(orders);
+    renderSellerProducts(sellerProducts);
+}
+
+function renderRecentOrders(orders) {
+    const tbody = document.getElementById("recentOrders");
+
+    if (orders.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4" class="empty-row">
+                    No orders yet. Place a demo order to see it here.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = [...orders].slice(0, 5).map(order => {
+        const status = String(order.status || "Placed");
+
+        return `
+            <tr>
+                <td>${escapeHTML(order.id || order.orderId || "—")}</td>
+                <td>${escapeHTML(formatDate(order.date || order.createdAt))}</td>
+                <td><strong>${money(getOrderTotal(order))}</strong></td>
+                <td>
+                    <span class="status ${getStatusClass(status)}">
+                        ${escapeHTML(status)}
+                    </span>
+                </td>
+            </tr>
+        `;
+    }).join("");
+}
+
+function renderSellerProducts(products) {
+    const container = document.getElementById("sellerProducts");
+
+    if (products.length === 0) {
+        container.innerHTML = `
+            <p class="stat-note">
+                No seller-added products yet. Use “Add a Product” to get started.
+            </p>
+        `;
+        return;
+    }
+
+    container.innerHTML = products.slice(0, 6).map(product => {
+        const name = product.name || product.productName || "Grocery Item";
+        const emoji = product.emoji || "🥬";
+        const price = Number(product.price || 0);
+
+        return `
+            <article class="product-mini">
+                <div class="emoji">${escapeHTML(emoji)}</div>
+                <strong>${escapeHTML(name)}</strong>
+                <small>${money(price)}</small>
+            </article>
+        `;
+    }).join("");
+}
+
+loadDashboard();
+</script>
+
+</body>
+</html>

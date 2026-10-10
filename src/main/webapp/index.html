@@ -1,0 +1,554 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShesumaMart | Home</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --green: #176b46;
+            --dark-green: #125536;
+            --orange: #e28b28;
+            --background: #f7faf5;
+            --text: #26372d;
+            --muted: #68756c;
+            --white: #ffffff;
+            --border: #e3eae2;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .topbar {
+            background: var(--dark-green);
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-size: 13px;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: auto;
+            min-height: 75px;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--green);
+            white-space: nowrap;
+        }
+
+        .logo span {
+            color: var(--orange);
+        }
+
+        .navlinks {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .navlinks a {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .navlinks a:hover {
+            color: var(--green);
+        }
+
+        .nav-button {
+            background: var(--green);
+            color: white !important;
+            padding: 10px 16px;
+            border-radius: 8px;
+        }
+
+        .hero {
+            background: #e5f2e7;
+            padding: 65px 25px;
+        }
+
+        .hero-content {
+            max-width: 1150px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 45px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: white;
+            color: var(--green);
+            padding: 7px 14px;
+            border-radius: 25px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            font-size: clamp(35px, 5vw, 55px);
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        h1 span {
+            color: var(--green);
+        }
+
+        .hero p {
+            color: var(--muted);
+            max-width: 470px;
+            margin-bottom: 28px;
+            font-size: 16px;
+        }
+
+        .button {
+            display: inline-block;
+            background: var(--green);
+            color: white;
+            border-radius: 9px;
+            padding: 13px 22px;
+            font-weight: bold;
+            border: 2px solid var(--green);
+            transition: 0.2s;
+        }
+
+        .button:hover {
+            background: var(--dark-green);
+            border-color: var(--dark-green);
+            transform: translateY(-2px);
+        }
+
+        .secondary-button {
+            background: transparent;
+            color: var(--green);
+            margin-left: 8px;
+        }
+
+        .secondary-button:hover {
+            color: white;
+        }
+
+        .hero-image {
+            min-height: 330px;
+            border-radius: 22px;
+            background:
+                url("https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1000&q=85")
+                center / cover no-repeat;
+            box-shadow: 0 15px 35px #176b4620;
+        }
+
+        .benefits {
+            max-width: 1150px;
+            margin: 30px auto;
+            padding: 0 25px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .benefit {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .benefit-icon {
+            font-size: 30px;
+        }
+
+        .benefit h3 {
+            font-size: 15px;
+        }
+
+        .benefit p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .section {
+            max-width: 1150px;
+            margin: 55px auto;
+            padding: 0 25px;
+        }
+
+        .section-heading {
+            margin-bottom: 25px;
+        }
+
+        .section-heading h2 {
+            font-size: 29px;
+            margin-bottom: 5px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .category {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            min-height: 135px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            transition: 0.2s;
+        }
+
+        .category:hover {
+            transform: translateY(-4px);
+            border-color: var(--green);
+            box-shadow: 0 8px 20px #176b4610;
+        }
+
+        .category .emoji {
+            font-size: 36px;
+        }
+
+        .category h3 {
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .shop-section {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .shop-section h2 {
+            font-size: 27px;
+            margin-bottom: 8px;
+        }
+
+        .shop-section p {
+            color: var(--muted);
+            max-width: 600px;
+        }
+
+        .shop-icon {
+            font-size: 50px;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding: 35px 25px;
+            background: #153f2b;
+            color: white;
+        }
+
+        .footer-content {
+            max-width: 1150px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-content p {
+            color: #d3e3d7;
+            font-size: 13px;
+        }
+
+        @media (max-width: 900px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-image {
+                min-height: 280px;
+            }
+
+            .categories {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .benefits {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 15px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+
+            .navlinks {
+                gap: 14px;
+            }
+
+            .hero {
+                padding: 40px 18px;
+            }
+
+            .hero-image {
+                min-height: 220px;
+            }
+
+            .categories {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .section {
+                padding: 0 18px;
+                margin: 40px auto;
+            }
+
+            .shop-section {
+                padding: 24px;
+            }
+
+            .secondary-button {
+                margin: 10px 0 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar">
+        Fresh groceries for your everyday needs
+    </div>
+
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo">
+                🛒 Shesuma<span>Mart</span>
+            </a>
+
+            <div class="navlinks">
+                <a href="index.html">Home</a>
+                <a href="product.html">Categories</a>
+                <a href="product.html">Groceries</a>
+                <a href="cart.html">Cart</a>
+                <a href="orders.html">My Orders</a>
+                <a href="login.html" class="nav-button">Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="hero">
+            <div class="hero-content">
+
+                <div>
+                    <span class="tag">YOUR DAILY GROCERY PARTNER</span>
+
+                    <h1>
+                        Fresh groceries,<br>
+                        <span>happy homes.</span>
+                    </h1>
+
+                    <p>
+                        Fresh picks for your everyday needs.
+                        Discover vegetables, fruits, rice, dairy
+                        and other grocery essentials at ShesumaMart.
+                    </p>
+
+                    <a href="product.html" class="button">
+                        Shop Groceries →
+                    </a>
+
+                    <a href="product.html"
+                       class="button secondary-button">
+                        Browse Products
+                    </a>
+                </div>
+
+                <a href="product.html"
+                   class="hero-image"
+                   aria-label="Browse fresh groceries">
+                </a>
+
+            </div>
+        </section>
+
+        <section class="benefits">
+
+            <div class="benefit">
+                <span class="benefit-icon">🥬</span>
+                <div>
+                    <h3>Fresh Groceries</h3>
+                    <p>Everyday grocery essentials</p>
+                </div>
+            </div>
+
+            <div class="benefit">
+                <span class="benefit-icon">🛒</span>
+                <div>
+                    <h3>Easy Shopping</h3>
+                    <p>Browse products in one place</p>
+                </div>
+            </div>
+
+            <div class="benefit">
+                <span class="benefit-icon">🏡</span>
+                <div>
+                    <h3>Made for Your Home</h3>
+                    <p>Shop your everyday needs</p>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="section" id="categories">
+
+            <div class="section-heading">
+                <h2>Shop by Category</h2>
+                <p>Find your everyday essentials easily.</p>
+            </div>
+
+            <div class="categories">
+
+                <a href="product.html" class="category">
+                    <span class="emoji">🥦</span>
+                    <h3>Vegetables</h3>
+                </a>
+
+                <a href="product.html" class="category">
+                    <span class="emoji">🍎</span>
+                    <h3>Fruits</h3>
+                </a>
+
+                <a href="product.html" class="category">
+                    <span class="emoji">🥛</span>
+                    <h3>Dairy</h3>
+                </a>
+
+                <a href="product.html" class="category">
+                    <span class="emoji">🍚</span>
+                    <h3>Rice &amp; Staples</h3>
+                </a>
+
+                <a href="product.html" class="category">
+                    <span class="emoji">🍪</span>
+                    <h3>Snacks</h3>
+                </a>
+
+                <a href="product.html" class="category">
+                    <span class="emoji">🧂</span>
+                    <h3>Cooking Essentials</h3>
+                </a>
+
+            </div>
+
+        </section>
+
+        <section class="section">
+            <div class="shop-section">
+
+                <div>
+                    <h2>Explore Our Groceries</h2>
+                    <p>
+                        Visit our existing grocery products page to
+                        search products, check prices, and add items
+                        to your cart.
+                    </p>
+                </div>
+
+                <div>
+                    <span class="shop-icon">🛍️</span>
+                    <br>
+                    <a href="product.html" class="button">
+                        View All Products →
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+
+            <div>
+                <a href="index.html"
+                   class="logo"
+                   style="color: white;">
+                    Shesuma<span>Mart</span>
+                </a>
+                <p>Fresh groceries. Easy shopping.</p>
+            </div>
+
+            <div>
+                <p>
+                    <a href="index.html">Home</a> |
+                    <a href="product.html">Groceries</a> |
+                    <a href="cart.html">Cart</a>
+                </p>
+                <p>© <span id="year"></span> ShesumaMart</p>
+            </div>
+
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById("year").textContent =
+            new Date().getFullYear();
+    </script>
+
+</body>
+</html>

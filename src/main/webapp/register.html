@@ -1,0 +1,104 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | ShesumaMart</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="auth-page">
+
+<div class="auth-card">
+    <a class="brand" href="index.html">🛒 Shesuma<span>Mart</span></a>
+    <p class="eyebrow">JOIN SHESUMAMART</p>
+    <h1>Create your account</h1>
+
+    <form id="registerForm">
+        <label>Full name
+            <input id="name" type="text" required
+                   maxlength="100" placeholder="Your name">
+        </label>
+
+        <label>Email
+            <input id="regEmail" type="email" required
+                   placeholder="you@example.com">
+        </label>
+
+        <label>Password
+            <input id="regPassword" type="password" minlength="8"
+                   maxlength="72" required placeholder="Minimum 8 characters">
+        </label>
+
+        <label>Role
+            <select id="role" required>
+                <option value="BUYER">Buyer</option>
+                <option value="SELLER">Seller</option>
+            </select>
+        </label>
+
+        <button class="primary-btn full" id="registerButton" type="submit">
+            Create Account
+        </button>
+    </form>
+
+    <p class="muted">
+        Already have an account? <a href="login.html">Login</a>
+    </p>
+
+    <p id="registerMessage" class="message" role="status"></p>
+</div>
+
+<script>
+document.getElementById("registerForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const message = document.getElementById("registerMessage");
+    const button = document.getElementById("registerButton");
+
+    button.disabled = true;
+    button.textContent = "Creating account...";
+    message.textContent = "";
+
+    try {
+        const response = await fetch("api/v1/auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "same-origin",
+            body: JSON.stringify({
+                name: document.getElementById("name").value.trim(),
+                email: document.getElementById("regEmail").value.trim(),
+                password: document.getElementById("regPassword").value,
+                role: document.getElementById("role").value
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || data.success !== true) {
+            throw new Error(data.message || "Registration failed.");
+        }
+
+        message.textContent = "Registration successful! Redirecting to login...";
+        document.getElementById("registerForm").reset();
+
+        setTimeout(function () {
+            window.location.href = "login.html";
+        }, 1000);
+
+    } catch (error) {
+        message.textContent = error.message ||
+            "Server connection failed. Please try again.";
+    } finally {
+        button.disabled = false;
+        button.textContent = "Create Account";
+    }
+});
+</script>
+
+</body>
+</html>
+```
+

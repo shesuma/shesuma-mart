@@ -1,0 +1,471 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard | ShesumaMart</title>
+<style>
+:root {
+    --green: #28784b;
+    --dark: #1d5938;
+    --orange: #e28b28;
+    --bg: #f4f7f3;
+    --white: #ffffff;
+    --text: #24352a;
+    --muted: #748076;
+    --border: #e5ebe4;
+    --red: #c94c4c;
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+.layout { display: flex; min-height: 100vh; }
+.sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    background: var(--dark);
+    color: white;
+    padding: 28px 18px;
+}
+.brand {
+    font-size: 25px;
+    font-weight: 800;
+    margin: 0 0 8px;
+}
+.brand span { color: #f3ad54; }
+.admin-label {
+    color: #c5dfcc;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 35px;
+}
+.nav-title {
+    color: #a9cbb2;
+    font-size: 11px;
+    margin: 24px 12px 10px;
+    letter-spacing: 1.5px;
+}
+.nav-link {
+    display: block;
+    color: #e3efe5;
+    text-decoration: none;
+    padding: 13px 14px;
+    border-radius: 10px;
+    margin: 5px 0;
+    font-size: 14px;
+}
+.nav-link:hover, .nav-link.active {
+    background: #347b50;
+    color: white;
+}
+.sidebar-bottom {
+    margin-top: 45px;
+    border-top: 1px solid #477557;
+    padding-top: 18px;
+}
+.sidebar-bottom a { color: #f4c17d; }
+.main { flex: 1; min-width: 0; }
+.topbar {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+.topbar small { color: var(--muted); }
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #e3f1e5;
+    color: var(--dark);
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+}
+.content { padding: 30px 32px; }
+.eyebrow {
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+h1 { font-size: 29px; margin: 8px 0; }
+.subtitle { color: var(--muted); margin: 0 0 25px; }
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 25px;
+}
+.card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 5px 20px #183d1710;
+}
+.stat-label { color: var(--muted); font-size: 13px; }
+.stat-value { font-size: 29px; font-weight: 800; margin: 13px 0 7px; }
+.stat-note { color: var(--green); font-size: 12px; }
+.stat-icon { font-size: 23px; }
+.panel { margin-bottom: 24px; }
+.panel-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+.panel-heading h2 { margin: 0; font-size: 19px; }
+.filters { display: flex; gap: 10px; flex-wrap: wrap; }
+input, select {
+    border: 1px solid #dce5dc;
+    border-radius: 9px;
+    padding: 10px 12px;
+    background: white;
+    color: var(--text);
+    outline-color: var(--green);
+}
+.search { width: 230px; max-width: 100%; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; white-space: nowrap; }
+th {
+    background: #f7faf6;
+    text-align: left;
+    color: var(--muted);
+    font-size: 12px;
+    padding: 14px;
+}
+td {
+    padding: 16px 14px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+}
+.badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+.active-badge { color: #28784b; background: #e5f5e8; }
+.pending-badge { color: #9b6816; background: #fff1d6; }
+.blocked-badge { color: #a73737; background: #fde8e8; }
+.btn {
+    border: 0;
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-weight: 700;
+    font-size: 12px;
+}
+.btn-primary { background: var(--green); color: white; }
+.btn-primary:hover { background: var(--dark); }
+.btn-light { background: #edf3ed; color: var(--dark); }
+.btn-danger { background: #fde8e8; color: var(--red); }
+.btn-orange { background: var(--orange); color: white; }
+.activity {
+    display: flex;
+    gap: 13px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+}
+.activity:last-child { border-bottom: 0; }
+.activity-icon {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: #e9f4e9;
+}
+.activity p { margin: 3px 0; font-size: 13px; }
+.activity small { color: var(--muted); }
+.empty { text-align: center; padding: 25px; color: var(--muted); }
+.footer { padding: 10px 32px 28px; color: var(--muted); font-size: 12px; }
+.toast {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    background: var(--dark);
+    color: white;
+    padding: 14px 20px;
+    border-radius: 10px;
+    display: none;
+    z-index: 10;
+    box-shadow: 0 8px 25px #0002;
+}
+@media (max-width: 1100px) {
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+    .layout { display: block; }
+    .sidebar { width: 100%; padding: 18px; }
+    .admin-label { margin-bottom: 12px; }
+    .nav-title, .sidebar-bottom { display: none; }
+    .nav-link { display: inline-block; margin: 3px; padding: 10px; }
+    .topbar { padding: 16px 18px; }
+    .content { padding: 22px 16px; }
+    .stats { gap: 10px; }
+    .card { padding: 16px; }
+    .stat-value { font-size: 24px; }
+    .search { width: 100%; }
+    .filters { width: 100%; }
+    .filters select { flex: 1; min-width: 130px; }
+    .footer { padding: 10px 16px 24px; }
+}
+@media (max-width: 390px) {
+    .stats { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+    <div class="brand">🛒 Shesuma<span>Mart</span></div>
+    <div class="admin-label">ADMIN CONTROL PANEL</div>
+
+    <div class="nav-title">WORKSPACE</div>
+    <a class="nav-link active" href="admin.html">▦ &nbsp; Overview</a>
+    <a class="nav-link" href="#users">♙ &nbsp; User Management</a>
+    <a class="nav-link" href="#products">🛍 &nbsp; Product Overview</a>
+    <a class="nav-link" href="#activity">◷ &nbsp; Recent Activity</a>
+
+    <div class="nav-title">OTHER PAGES</div>
+    <a class="nav-link" href="index.html">⌂ &nbsp; Visit Store</a>
+    <a class="nav-link" href="seller.html">▤ &nbsp; Seller Portal</a>
+    <a class="nav-link" href="dashboard.html">◫ &nbsp; User Dashboard</a>
+
+    <div class="sidebar-bottom">
+        <a class="nav-link" href="login.html">↪ &nbsp; Back to Login</a>
+    </div>
+</aside>
+
+<main class="main">
+    <header class="topbar">
+        <div>
+            <strong>Admin Overview</strong><br>
+            <small>Manage your grocery marketplace</small>
+        </div>
+        <div class="profile">
+            <div class="avatar">A</div>
+            <div><strong>Administrator</strong><br><small>Frontend demo</small></div>
+        </div>
+    </header>
+
+    <section class="content">
+        <div class="eyebrow">CONTROL CENTER</div>
+        <h1>Welcome, Admin 👋</h1>
+        <p class="subtitle">Here's an overview of your ShesumaMart grocery store.</p>
+
+        <div class="stats">
+            <div class="card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-label">Total Users</div>
+                <div class="stat-value" id="totalUsers">248</div>
+                <div class="stat-note">Demo statistics</div>
+            </div>
+            <div class="card">
+                <div class="stat-icon">🛍️</div>
+                <div class="stat-label">Grocery Products</div>
+                <div class="stat-value" id="totalProducts">86</div>
+                <div class="stat-note">Demo statistics</div>
+            </div>
+            <div class="card">
+                <div class="stat-icon">📦</div>
+                <div class="stat-label">Total Orders</div>
+                <div class="stat-value">124</div>
+                <div class="stat-note">Demo statistics</div>
+            </div>
+            <div class="card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-label">Sample Revenue</div>
+                <div class="stat-value">₹42.8k</div>
+                <div class="stat-note">Illustrative amount only</div>
+            </div>
+        </div>
+
+        <section class="card panel" id="users">
+            <div class="panel-heading">
+                <div>
+                    <h2>User Management</h2>
+                    <small class="subtitle">Sample users for frontend testing</small>
+                </div>
+                <div class="filters">
+                    <input class="search" id="userSearch" placeholder="Search name or email...">
+                    <select id="roleFilter">
+                        <option value="ALL">All Roles</option>
+                        <option value="BUYER">Buyer</option>
+                        <option value="SELLER">Seller</option>
+                        <option value="ADMIN">Admin</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>USER</th><th>EMAIL</th><th>ROLE</th>
+                            <th>STATUS</th><th>ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card panel" id="products">
+            <div class="panel-heading">
+                <div>
+                    <h2>Grocery Product Overview</h2>
+                    <small class="subtitle">Example inventory summary</small>
+                </div>
+                <button class="btn btn-primary" onclick="showToast('Product management will be connected to the backend later.')">Manage Products</button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>PRODUCT</th><th>CATEGORY</th><th>PRICE</th><th>STOCK</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Fresh Tomatoes 🍅</td><td>Vegetables</td><td>₹30/kg</td><td>45 kg</td></tr>
+                        <tr><td>Farm Apples 🍎</td><td>Fruits</td><td>₹120/kg</td><td>28 kg</td></tr>
+                        <tr><td>Fresh Milk 🥛</td><td>Dairy</td><td>₹30/500 ml</td><td>60 packs</td></tr>
+                        <tr><td>Premium Rice 🌾</td><td>Staples</td><td>₹65/kg</td><td>35 kg</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card panel" id="activity">
+            <div class="panel-heading">
+                <h2>Recent Activity</h2>
+                <button class="btn btn-light" onclick="showToast('These activities are sample data.')">About Activity</button>
+            </div>
+            <div class="activity">
+                <div class="activity-icon">👤</div>
+                <div><p><strong>New buyer registered</strong></p><small>Sample activity · Today</small></div>
+            </div>
+            <div class="activity">
+                <div class="activity-icon">🛒</div>
+                <div><p><strong>Grocery order placed</strong></p><small>Sample activity · Today</small></div>
+            </div>
+            <div class="activity">
+                <div class="activity-icon">🥬</div>
+                <div><p><strong>Vegetable inventory updated</strong></p><small>Sample activity · Yesterday</small></div>
+            </div>
+        </section>
+
+        <div class="card">
+            <h2>Quick Actions</h2>
+            <p class="subtitle">These buttons are frontend demonstrations until the backend is connected.</p>
+            <div class="filters">
+                <button class="btn btn-primary" onclick="showToast('User management backend is not connected yet.')">Manage Users</button>
+                <button class="btn btn-orange" onclick="showToast('Order management will be connected later.')">Review Orders</button>
+                <button class="btn btn-light" onclick="showToast('Reports will be connected to real data later.')">View Reports</button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">© 2026 ShesumaMart · Admin Panel · Frontend Preview</footer>
+</main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const users = [
+    { name: "Arun Kumar", email: "arun@example.com", role: "BUYER", status: "Active" },
+    { name: "Priya Devi", email: "priya@example.com", role: "SELLER", status: "Active" },
+    { name: "Kavin Raj", email: "kavin@example.com", role: "BUYER", status: "Active" },
+    { name: "Meena Stores", email: "meena@example.com", role: "SELLER", status: "Pending" },
+    { name: "Admin Demo", email: "admin@example.com", role: "ADMIN", status: "Active" }
+];
+
+function renderUsers() {
+    const search = document.getElementById("userSearch").value.toLowerCase().trim();
+    const role = document.getElementById("roleFilter").value;
+    const tbody = document.getElementById("userTable");
+
+    const filtered = users.filter(user =>
+        (user.name.toLowerCase().includes(search) ||
+         user.email.toLowerCase().includes(search)) &&
+        (role === "ALL" || user.role === role)
+    );
+
+    tbody.innerHTML = "";
+
+    if (!filtered.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty">No matching users found.</td></tr>';
+        return;
+    }
+
+    filtered.forEach(user => {
+        const tr = document.createElement("tr");
+
+        const nameCell = document.createElement("td");
+        nameCell.textContent = user.name;
+
+        const emailCell = document.createElement("td");
+        emailCell.textContent = user.email;
+
+        const roleCell = document.createElement("td");
+        roleCell.textContent = user.role;
+
+        const statusCell = document.createElement("td");
+        const badge = document.createElement("span");
+        badge.className = "badge " +
+            (user.status === "Active" ? "active-badge" : "pending-badge");
+        badge.textContent = user.status;
+        statusCell.appendChild(badge);
+
+        const actionCell = document.createElement("td");
+        const button = document.createElement("button");
+        button.className = "btn " +
+            (user.status === "Active" ? "btn-danger" : "btn-primary");
+        button.textContent = user.status === "Active" ? "Block (Demo)" : "Approve (Demo)";
+        button.addEventListener("click", () => {
+            showToast("Demo only: user status is not changed or saved.");
+        });
+        actionCell.appendChild(button);
+
+        tr.append(nameCell, emailCell, roleCell, statusCell, actionCell);
+        tbody.appendChild(tr);
+    });
+}
+
+function showToast(message) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.style.display = "block";
+    clearTimeout(window.toastTimer);
+    window.toastTimer = setTimeout(() => {
+        toast.style.display = "none";
+    }, 3000);
+}
+
+document.getElementById("userSearch").addEventListener("input", renderUsers);
+document.getElementById("roleFilter").addEventListener("change", renderUsers);
+renderUsers();
+</script>
+</body>
+</html>

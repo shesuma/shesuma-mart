@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard | ShesumaMart</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7f4;
+            color: #26352b;
+        }
+        header {
+            background: #1d5938;
+            color: white;
+            padding: 18px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        header h1 { font-size: 25px; }
+        header a { color: white; text-decoration: none; margin-left: 16px; }
+        .container { max-width: 1150px; margin: 30px auto; padding: 0 18px; }
+        .welcome { margin-bottom: 24px; }
+        .welcome h2 { margin-bottom: 8px; color: #1d5938; }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #0000000c;
+        }
+        .card p { color: #68776c; margin-bottom: 12px; }
+        .card h3 { color: #1d5938; font-size: 27px; }
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(260px, 340px) 1fr;
+            gap: 22px;
+            align-items: start;
+        }
+        h2.section-title { margin-bottom: 18px; font-size: 21px; }
+        label { display: block; margin: 14px 0 6px; font-weight: bold; font-size: 14px; }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d5dfd6;
+            border-radius: 7px;
+            font-size: 15px;
+            background: white;
+        }
+        button {
+            border: none;
+            border-radius: 7px;
+            padding: 12px 16px;
+            background: #28784b;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover { background: #1d5938; }
+        .submit-btn { width: 100%; margin-top: 18px; }
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 530px; }
+        th, td { padding: 13px 10px; border-bottom: 1px solid #edf0ed; text-align: left; }
+        th { background: #f0f6f0; color: #1d5938; }
+        .delete-btn { background: #c0392b; padding: 8px 11px; }
+        .delete-btn:hover { background: #962d22; }
+        .message { margin-top: 12px; font-size: 14px; }
+        .empty { color: #78847a; padding: 18px 0; }
+        footer { text-align: center; padding: 25px; color: #738074; }
+        @media (max-width: 760px) {
+            .layout { grid-template-columns: 1fr; }
+            header { align-items: flex-start; }
+            header nav { line-height: 2; }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>🛒 ShesumaMart</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="orders.html">Orders</a>
+        <a href="login.html">Logout</a>
+    </nav>
+</header>
+
+<main class="container">
+    <section class="welcome">
+        <h2>Seller Dashboard</h2>
+        <p>Manage your grocery products, prices and stock.</p>
+    </section>
+
+    <section class="stats">
+        <div class="card">
+            <p>Total Products</p>
+            <h3 id="totalProducts">0</h3>
+        </div>
+        <div class="card">
+            <p>Total Stock Units</p>
+            <h3 id="totalStock">0</h3>
+        </div>
+        <div class="card">
+            <p>Product Categories</p>
+            <h3 id="totalCategories">0</h3>
+        </div>
+    </section>
+
+    <section class="layout">
+        <div class="card">
+            <h2 class="section-title">➕ Add Grocery Product</h2>
+            <form id="productForm">
+                <label for="productName">Product Name</label>
+                <input id="productName" type="text" placeholder="e.g. Fresh Tomatoes" required maxlength="80">
+
+                <label for="category">Category</label>
+                <select id="category" required>
+                    <option value="">Select category</option>
+                    <option>Vegetables</option>
+                    <option>Fruits</option>
+                    <option>Rice & Staples</option>
+                    <option>Dairy & Eggs</option>
+                    <option>Snacks</option>
+                    <option>Other Groceries</option>
+                </select>
+
+                <label for="price">Price (₹)</label>
+                <input id="price" type="number" min="0.01" step="0.01" placeholder="Price in rupees" required>
+
+                <label for="stock">Stock Quantity</label>
+                <input id="stock" type="number" min="0" step="1" placeholder="Available quantity" required>
+
+                <button class="submit-btn" type="submit">Add Product</button>
+                <p class="message" id="formMessage" role="status"></p>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">📦 Your Grocery Products</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTable"></tbody>
+                </table>
+            </div>
+            <p class="empty" id="emptyMessage">No products added yet.</p>
+        </div>
+    </section>
+</main>
+
+<footer>© 2026 ShesumaMart | Fresh Groceries, Everyday</footer>
+
+<script>
+    const STORAGE_KEY = "shesumaMartSellerProducts";
+    const form = document.getElementById("productForm");
+    const table = document.getElementById("productTable");
+    const emptyMessage = document.getElementById("emptyMessage");
+    const formMessage = document.getElementById("formMessage");
+
+    let products = [];
+
+    try {
+        products = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        if (!Array.isArray(products)) products = [];
+    } catch (error) {
+        products = [];
+    }
+
+    function saveProducts() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+    }
+
+    function addCell(row, value) {
+        const cell = document.createElement("td");
+        cell.textContent = value;
+        row.appendChild(cell);
+        return cell;
+    }
+
+    function renderProducts() {
+        table.replaceChildren();
+
+        products.forEach(product => {
+            const row = document.createElement("tr");
+            addCell(row, product.name);
+            addCell(row, product.category);
+            addCell(row, "₹" + Number(product.price).toFixed(2));
+            addCell(row, String(product.stock));
+
+            const actionCell = document.createElement("td");
+            const deleteButton = document.createElement("button");
+            deleteButton.className = "delete-btn";
+            deleteButton.textContent = "Delete";
+            deleteButton.type = "button";
+            deleteButton.addEventListener("click", () => {
+                products = products.filter(item => item.id !== product.id);
+                saveProducts();
+                renderProducts();
+            });
+
+            actionCell.appendChild(deleteButton);
+            row.appendChild(actionCell);
+            table.appendChild(row);
+        });
+
+        emptyMessage.hidden = products.length > 0;
+        document.getElementById("totalProducts").textContent = products.length;
+        document.getElementById("totalStock").textContent =
+            products.reduce((sum, product) => sum + Number(product.stock), 0);
+        document.getElementById("totalCategories").textContent =
+            new Set(products.map(product => product.category)).size;
+    }
+
+    form.addEventListener("submit", event => {
+        event.preventDefault();
+
+        const name = document.getElementById("productName").value.trim();
+        const category = document.getElementById("category").value;
+        const price = Number(document.getElementById("price").value);
+        const stock = Number(document.getElementById("stock").value);
+
+        if (!name || !category || !Number.isFinite(price) || price <= 0 ||
+            !Number.isInteger(stock) || stock < 0) {
+            formMessage.textContent = "Please enter valid product details.";
+            formMessage.style.color = "#c0392b";
+            return;
+        }
+
+        products.push({
+            id: Date.now().toString() + Math.random().toString(16).slice(2),
+            name,
+            category,
+            price,
+            stock
+        });
+
+        saveProducts();
+        renderProducts();
+        form.reset();
+
+        formMessage.textContent = "Product added successfully!";
+        formMessage.style.color = "#28784b";
+    });
+
+    renderProducts();
+</script>
+</body>
+</html>

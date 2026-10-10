@@ -1,0 +1,360 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShesumaMart | Fresh Groceries</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f6f8f5;color:#20352a}
+header{background:#176b45;color:white;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+header h1{margin:0}
+header a{color:white;text-decoration:none;margin-left:12px}
+.hero{padding:30px 5%;background:#e4f2e8}
+.hero h2{margin-top:0}
+.controls,.categories{padding:16px 5%;display:flex;gap:10px;flex-wrap:wrap}
+input,select,button,textarea{padding:11px;border:1px solid #d3ded5;border-radius:8px;font:inherit}
+input,textarea{width:100%}
+.controls input{flex:1;min-width:180px}
+button{cursor:pointer;background:#176b45;color:white;border:0}
+button:hover{background:#105537}
+.categories button{background:white;color:#176b45;border:1px solid #176b45}
+.categories button.active{background:#176b45;color:white}
+#count{padding:0 5% 15px;color:#607164}
+.grid{padding:0 5% 35px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px}
+.card{background:white;border-radius:14px;overflow:hidden;box-shadow:0 4px 15px #173b2010;display:flex;flex-direction:column}
+.photo{height:190px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.photo img{width:100%;height:100%;object-fit:contain;padding:8px;transition:transform .3s}
+.card:hover .photo img{transform:scale(1.04)}
+.info{padding:14px;display:flex;flex-direction:column;gap:9px;flex:1}
+.category{font-size:12px;color:#63816d;text-transform:uppercase}
+.name{font-size:18px;font-weight:bold}
+.rating{color:#e9a21a;font-size:15px}
+.rating span{color:#607164;font-size:13px}
+.price{font-size:21px;font-weight:bold;color:#176b45}
+.unit{font-size:12px;color:#718075}
+.review-preview{font-size:13px;color:#657367;min-height:32px}
+.actions{display:flex;gap:8px;margin-top:auto}
+.actions button{flex:1}
+.wish{background:#f8e9e9;color:#a52a3a}
+.review-btn{width:100%;background:#edf5ef;color:#176b45}
+#cartPanel{position:fixed;right:12px;bottom:12px;width:260px;max-width:90%;padding:14px;background:white;box-shadow:0 4px 20px #0002;border-radius:12px;z-index:5}
+#cartItems{max-height:100px;overflow:auto;font-size:13px}
+#toast{position:fixed;top:12px;right:12px;background:#176b45;color:white;padding:12px;border-radius:8px;display:none;z-index:30}
+footer{text-align:center;background:#163f2c;color:white;padding:20px;margin-top:20px}
+
+/* Review popup */
+.modal{display:none;position:fixed;inset:0;background:#0008;z-index:50;align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.modal-box{background:white;border-radius:16px;width:100%;max-width:520px;max-height:90vh;overflow:auto;padding:22px;box-shadow:0 10px 40px #0003}
+.modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.modal-head h2{margin:0;color:#176b45}
+.close-btn{background:#eee;color:#333;font-size:20px;padding:5px 12px}
+.review-list{margin:15px 0}
+.review-item{padding:12px 0;border-bottom:1px solid #e5ebe5}
+.review-item p{margin:8px 0;overflow-wrap:anywhere}
+.review-date{font-size:12px;color:#77847a}
+.star-picker{display:flex;gap:6px;margin:8px 0 14px}
+.star-picker button{background:transparent;color:#c8cec8;font-size:30px;padding:0 3px}
+.star-picker button.selected{color:#e9a21a}
+.form-label{display:block;font-weight:bold;margin:12px 0 6px}
+.submit-review{width:100%;margin-top:12px}
+.empty-reviews{color:#718075;background:#f6f8f5;padding:14px;border-radius:8px}
+@media(max-width:500px){
+.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.photo{height:135px}
+.info{padding:9px}
+.name{font-size:15px}
+.actions{gap:5px}
+.actions button{padding:9px 4px;font-size:13px}
+#cartPanel{width:225px}
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🛒 ShesumaMart</h1>
+<nav><a href="index.html">Home</a> | <a href="orders.html">My Orders</a></nav>
+</header>
+
+<section class="hero">
+<h2>Fresh groceries, delivered with care.</h2>
+<p>Fresh picks for your everyday needs.</p>
+</section>
+
+<div class="controls">
+<input id="search" placeholder="Search groceries..." aria-label="Search groceries">
+<select id="sort" aria-label="Sort products">
+<option value="default">Featured</option>
+<option value="low">Price: Low to High</option>
+<option value="high">Price: High to Low</option>
+<option value="rating">Top Rated</option>
+</select>
+</div>
+
+<div class="categories" id="categories"></div>
+<div id="count"></div>
+<main class="grid" id="products"></main>
+
+<aside id="cartPanel">
+<strong>🛒 Your Cart (<span id="cartCount">0</span>)</strong>
+<div id="cartItems">Your cart is empty.</div>
+<p id="cartTotal">Total: ₹0</p>
+<button onclick="location.href='cart.html'" style="width:100%">View Cart / Checkout</button>
+</aside>
+
+<div id="toast" role="status"></div>
+
+<!-- Reviews modal -->
+<div class="modal" id="reviewModal" role="dialog" aria-modal="true" aria-labelledby="reviewTitle">
+ <div class="modal-box">
+  <div class="modal-head">
+   <h2 id="reviewTitle">Product Reviews</h2>
+   <button class="close-btn" onclick="closeReview()" aria-label="Close reviews">×</button>
+  </div>
+  <div id="reviewProductInfo"></div>
+  <div id="reviewList" class="review-list"></div>
+
+  <form id="reviewForm">
+   <h3>Write your review</h3>
+   <label class="form-label">Your rating</label>
+   <div class="star-picker" id="starPicker" role="group" aria-label="Choose rating">
+    <button type="button" data-rating="1" aria-label="1 star">★</button>
+    <button type="button" data-rating="2" aria-label="2 stars">★</button>
+    <button type="button" data-rating="3" aria-label="3 stars">★</button>
+    <button type="button" data-rating="4" aria-label="4 stars">★</button>
+    <button type="button" data-rating="5" aria-label="5 stars">★</button>
+   </div>
+   <label class="form-label" for="reviewText">Your review</label>
+   <textarea id="reviewText" rows="4" maxlength="500" placeholder="Share your experience with this product..." required></textarea>
+   <button type="submit" class="submit-review">Submit Review</button>
+  </form>
+ </div>
+</div>
+
+<footer>© 2026 ShesumaMart</footer>
+
+<script>
+const raw=[
+["Tomato","Vegetables",30,"kg","photo-1546094096-0df4bcaaa337"],
+["Potato","Vegetables",35,"kg","photo-1518977676601-b53f82aba655"],
+["Onion","Vegetables",40,"kg","photo-1508747703725-719777637510"],
+["Carrot","Vegetables",50,"kg","photo-1445282768818-728615cc910a"],
+["Cucumber","Vegetables",35,"kg","photo-1604977042946-1eecc30f269e"],
+["Apple","Fruits",180,"kg","photo-1560806887-1e4cd0b6cbd6"],
+["Banana","Fruits",60,"dozen","photo-1571771894821-ce9b6c11b08e"],
+["Orange","Fruits",100,"kg","photo-1547514701-42782101795e"],
+["Grapes","Fruits",110,"kg","photo-1537640538966-79f369143f8f"],
+["Mango","Fruits",120,"kg","photo-1553279768-865429fa0078"],
+["Basmati Rice","Rice & Staples",120,"kg","photo-1586201375761-83865001e31c"],
+["Wheat Flour","Rice & Staples",48,"kg","photo-1627485937980-221c88ac04f9"],
+["Toor Dal","Rice & Staples",140,"kg","photo-1515543904379-3d757afe72e4"],
+["Milk","Dairy",30,"500 ml","photo-1563636619-e9143da7973b"],
+["Butter","Dairy",55,"100 g","photo-1589985270826-4b7bb135bc9d"],
+["Eggs","Dairy",85,"6 pieces","photo-1506976785307-8732e854ad03"],
+["Bread","Snacks",40,"loaf","photo-1509440159596-0249088772ff"],
+["Almonds","Snacks",210,"250 g","photo-1508061253366-f7da158b6d46"],
+["Cooking Oil","Cooking Essentials",145,"1 litre","photo-1474979266404-7eaacbcd87c5"],
+["Turmeric Powder","Cooking Essentials",45,"100 g","photo-1615485500704-8e990f9900f2"]
+];
+
+const products=raw.map((p,i)=>({
+ id:i+1,name:p[0],category:p[1],price:p[2],unit:p[3],
+ image:"https://images.unsplash.com/"+p[4]+"?auto=format&fit=crop&w=600&q=85",
+ rating:Number((4.2+(i%8)/10).toFixed(1))
+}));
+
+const categories=["All",...new Set(products.map(p=>p.category))];
+let activeCategory="All";
+let currentReviewId=null;
+let selectedRating=0;
+
+function readStorage(key,fallback){
+ try{
+  const value=JSON.parse(localStorage.getItem(key)||JSON.stringify(fallback));
+  return value ?? fallback;
+ }catch(error){return fallback}
+}
+let cart=readStorage("shesumaMartCart",[]);
+let wishlist=readStorage("shesumaMartWishlist",[]);
+let reviews=readStorage("shesumaMartReviews",{});
+
+function safe(s){
+ return String(s).replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
+}
+function toast(message){
+ const t=document.getElementById("toast");
+ t.textContent=message;t.style.display="block";
+ clearTimeout(window.toastTimer);
+ window.toastTimer=setTimeout(()=>t.style.display="none",2200);
+}
+function getReviews(id){
+ return Array.isArray(reviews[id])?reviews[id]:[];
+}
+function averageRating(p){
+ const rs=getReviews(p.id);
+ if(!rs.length)return p.rating;
+ return rs.reduce((sum,r)=>sum+Number(r.rating||0),0)/rs.length;
+}
+function renderCategories(){
+ document.getElementById("categories").innerHTML=categories.map(c=>
+ `<button class="${c===activeCategory?"active":""}" onclick="setCategory('${safe(c)}')">${safe(c)}</button>`
+ ).join("");
+}
+function setCategory(c){activeCategory=c;renderCategories();renderProducts()}
+
+function renderProducts(){
+ const term=document.getElementById("search").value.toLowerCase().trim();
+ let list=products.filter(p=>
+  (activeCategory==="All"||p.category===activeCategory)&&
+  (p.name.toLowerCase().includes(term)||p.category.toLowerCase().includes(term))
+ );
+ const sort=document.getElementById("sort").value;
+ if(sort==="low")list.sort((a,b)=>a.price-b.price);
+ if(sort==="high")list.sort((a,b)=>b.price-a.price);
+ if(sort==="rating")list.sort((a,b)=>averageRating(b)-averageRating(a));
+
+ document.getElementById("count").textContent=`Showing ${list.length} of ${products.length} products`;
+
+ document.getElementById("products").innerHTML=list.map(p=>{
+  const rs=getReviews(p.id);
+  const saved=wishlist.includes(p.id);
+  const avg=averageRating(p);
+  const stars="★".repeat(Math.round(avg))+"☆".repeat(5-Math.round(avg));
+  const latest=rs.length?rs[rs.length-1].text:"Fresh grocery essential";
+  return `<article class="card">
+   <div class="photo">
+    <img src="${p.image}" alt="${safe(p.name)}" loading="lazy"
+     onerror="this.onerror=null;this.src='https://placehold.co/600x400/f1f5f1/176b45?text='+encodeURIComponent('${safe(p.name)}')">
+   </div>
+   <div class="info">
+    <div class="category">${safe(p.category)}</div>
+    <div class="name">${safe(p.name)}</div>
+    <div class="rating" aria-label="${avg.toFixed(1)} out of 5 stars">
+     ${stars} <span>${avg.toFixed(1)} (${rs.length} reviews)</span>
+    </div>
+    <div class="price">₹${p.price} <span class="unit">/ ${safe(p.unit)}</span></div>
+    <div class="review-preview">${safe(latest.length>65?latest.slice(0,65)+"…":latest)}</div>
+    <div class="actions">
+     <button onclick="addToCart(${p.id})">Add to Cart</button>
+     <button class="wish" onclick="toggleWish(${p.id})" aria-label="Toggle wishlist">${saved?"♥":"♡"}</button>
+    </div>
+    <button class="review-btn" onclick="openReview(${p.id})">Read / Write Review</button>
+   </div>
+  </article>`;
+ }).join("");
+}
+
+function addToCart(id){
+ const p=products.find(x=>x.id===id);
+ if(!p)return;
+ const item=cart.find(x=>Number(x.id)===id);
+ if(item)item.quantity=(Number(item.quantity)||1)+1;
+ else cart.push({id:p.id,name:p.name,price:p.price,quantity:1,unit:p.unit});
+ localStorage.setItem("shesumaMartCart",JSON.stringify(cart));
+ updateCart();toast(p.name+" added to cart");
+}
+function toggleWish(id){
+ wishlist=wishlist.includes(id)?wishlist.filter(x=>x!==id):[...wishlist,id];
+ localStorage.setItem("shesumaMartWishlist",JSON.stringify(wishlist));
+ renderProducts();toast("Wishlist updated");
+}
+function openReview(id){
+ const p=products.find(x=>x.id===id);
+ if(!p)return;
+ currentReviewId=id;
+ selectedRating=0;
+ document.getElementById("reviewTitle").textContent=p.name+" Reviews";
+ document.getElementById("reviewProductInfo").innerHTML=
+ `<p><strong>₹${p.price} / ${safe(p.unit)}</strong></p>`;
+ document.getElementById("reviewText").value="";
+ updateStarPicker();
+ renderReviewList();
+ document.getElementById("reviewModal").classList.add("open");
+ document.body.style.overflow="hidden";
+}
+function closeReview(){
+ document.getElementById("reviewModal").classList.remove("open");
+ document.body.style.overflow="";
+ currentReviewId=null;
+}
+function renderReviewList(){
+ const list=document.getElementById("reviewList");
+ const rs=getReviews(currentReviewId);
+ if(!rs.length){
+  list.innerHTML='<div class="empty-reviews">No customer reviews yet. Be the first to review this product!</div>';
+  return;
+ }
+ list.innerHTML=`<h3>Customer reviews (${rs.length})</h3>`+rs.slice().reverse().map(r=>{
+  const n=Math.max(0,Math.min(5,Number(r.rating)||0));
+  const date=r.date?new Date(r.date).toLocaleDateString():"";
+  return `<div class="review-item">
+   <div class="rating">${"★".repeat(n)}${"☆".repeat(5-n)} <span>${n}/5</span></div>
+   <p>${safe(r.text)}</p>
+   <div class="review-date">${safe(date)}</div>
+  </div>`;
+ }).join("");
+}
+function updateStarPicker(){
+ document.querySelectorAll("#starPicker button").forEach(btn=>{
+  const n=Number(btn.dataset.rating);
+  btn.classList.toggle("selected",n<=selectedRating);
+  btn.setAttribute("aria-pressed",String(n===selectedRating));
+ });
+}
+document.querySelectorAll("#starPicker button").forEach(btn=>{
+ btn.addEventListener("click",()=>{
+  selectedRating=Number(btn.dataset.rating);
+  updateStarPicker();
+ });
+});
+document.getElementById("reviewForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ if(currentReviewId===null)return;
+ const text=document.getElementById("reviewText").value.trim();
+ if(selectedRating<1||selectedRating>5){
+  toast("Please select a rating from 1 to 5 stars");return;
+ }
+ if(!text){toast("Please write your review");return;}
+ if(!reviews[currentReviewId])reviews[currentReviewId]=[];
+ reviews[currentReviewId].push({
+  rating:selectedRating,
+  text:text,
+  date:new Date().toISOString()
+ });
+ localStorage.setItem("shesumaMartReviews",JSON.stringify(reviews));
+ renderReviewList();
+ renderProducts();
+ selectedRating=0;
+ document.getElementById("reviewText").value="";
+ updateStarPicker();
+ toast("Your review has been saved!");
+});
+document.getElementById("reviewModal").addEventListener("click",e=>{
+ if(e.target.id==="reviewModal")closeReview();
+});
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape")closeReview();
+});
+
+function updateCart(){
+ document.getElementById("cartCount").textContent=
+  cart.reduce((s,x)=>s+(Number(x.quantity)||1),0);
+ document.getElementById("cartItems").innerHTML=cart.length?
+  cart.map(x=>`<div>${safe(x.name)} × ${Number(x.quantity)||1} — ₹${Number(x.price)*(Number(x.quantity)||1)}</div>`).join("")
+  :"Your cart is empty.";
+ document.getElementById("cartTotal").textContent=
+  "Total: ₹"+cart.reduce((s,x)=>s+Number(x.price)*(Number(x.quantity)||1),0);
+}
+document.getElementById("search").addEventListener("input",renderProducts);
+document.getElementById("sort").addEventListener("change",renderProducts);
+renderCategories();
+renderProducts();
+updateCart();
+</script>
+</body>
+</html>

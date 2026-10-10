@@ -1,0 +1,421 @@
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopping Cart | ShesumaMart</title>
+
+<style>
+:root {
+    --green: #28784b;
+    --dark-green: #1d5938;
+    --orange: #e28b28;
+    --bg: #f5f8f5;
+    --text: #24352a;
+    --muted: #718074;
+    --white: #ffffff;
+    --border: #e3ebe4;
+    --red: #d94343;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+header {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    padding: 17px 6%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+.logo {
+    color: var(--green);
+    font-size: 25px;
+    font-weight: 800;
+    text-decoration: none;
+}
+.logo span { color: var(--orange); }
+nav { display: flex; gap: 20px; flex-wrap: wrap; }
+nav a {
+    text-decoration: none;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+}
+nav a:hover, nav a.active { color: var(--green); }
+main { width: 90%; max-width: 1150px; margin: 35px auto; }
+.page-heading { margin-bottom: 25px; }
+.page-heading h1 { font-size: 30px; margin-bottom: 8px; }
+.page-heading p { color: var(--muted); font-size: 14px; }
+.cart-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(280px, 1fr);
+    gap: 25px;
+    align-items: start;
+}
+.panel {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    padding: 24px;
+    box-shadow: 0 5px 18px rgba(35,70,45,.04);
+}
+.panel h2 { font-size: 19px; margin-bottom: 20px; }
+.cart-item {
+    display: grid;
+    grid-template-columns: 75px minmax(100px,1fr) auto;
+    gap: 15px;
+    align-items: center;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+}
+.cart-item:first-of-type { padding-top: 0; }
+.product-emoji {
+    width: 75px; height: 75px;
+    background: #f0f7ef; border-radius: 12px;
+    display: grid; place-items: center; font-size: 38px;
+}
+.product-name { font-size: 16px; font-weight: 700; margin-bottom: 7px; }
+.product-unit { color: var(--muted); font-size: 12px; margin-bottom: 8px; }
+.product-price { color: var(--green); font-weight: 800; }
+.quantity-controls { display: flex; align-items: center; gap: 11px; margin-top: 10px; }
+.quantity-controls button {
+    width: 29px; height: 29px; border: 1px solid var(--border);
+    background: white; border-radius: 7px; cursor: pointer; font-size: 17px;
+}
+.quantity-value { min-width: 15px; text-align: center; font-weight: 700; }
+.item-actions { text-align: right; }
+.item-total { font-weight: 800; margin-bottom: 12px; white-space: nowrap; }
+.remove-btn { border: none; background: transparent; color: var(--red); cursor: pointer; font-size: 13px; }
+.summary-row { display: flex; justify-content: space-between; gap: 12px; margin: 17px 0; font-size: 14px; }
+.summary-row.total {
+    border-top: 1px solid var(--border); padding-top: 19px;
+    font-size: 19px; font-weight: 800;
+}
+.summary-row.total strong { color: var(--green); }
+.delivery-note {
+    padding: 12px; border-radius: 9px; background: #eff8ef;
+    color: var(--dark-green); font-size: 13px; line-height: 1.5; margin: 20px 0;
+}
+.checkout-form { margin: 0 0 24px; padding: 16px; background: #f8fbf8; border: 1px solid var(--border); border-radius: 12px; }
+.checkout-form h2 { margin-bottom: 14px; }
+.form-field { margin-bottom: 12px; }
+.form-field label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.form-field input, .form-field textarea, .form-field select { width: 100%; padding: 11px 12px; border: 1px solid #ccd9ce; border-radius: 8px; font: inherit; font-size: 14px; background: white; }
+.form-field textarea { min-height: 72px; resize: vertical; }
+.primary-btn, .secondary-btn {
+    width: 100%; padding: 14px; border-radius: 9px; font-size: 15px;
+    font-weight: 700; cursor: pointer; text-align: center;
+    text-decoration: none; display: block;
+}
+.primary-btn { border: none; background: var(--green); color: white; }
+.primary-btn:hover { background: var(--dark-green); }
+.primary-btn:disabled { opacity: .6; cursor: wait; }
+.secondary-btn {
+    margin-top: 12px; background: white; color: var(--green);
+    border: 1px solid var(--green);
+}
+.empty-cart { text-align: center; padding: 45px 15px; }
+.empty-cart .empty-icon { font-size: 65px; margin-bottom: 15px; }
+.empty-cart h2 { margin-bottom: 10px; }
+.empty-cart p { color: var(--muted); margin-bottom: 22px; line-height: 1.5; }
+.empty-cart .primary-btn { max-width: 230px; margin: auto; }
+footer { text-align: center; color: var(--muted); font-size: 13px; padding: 25px 15px; }
+.notice { display: none; padding: 13px; border-radius: 9px; margin-bottom: 18px; font-size: 14px; }
+.notice.success { display: block; background: #eaf7ed; color: var(--dark-green); }
+.notice.error { display: block; background: #fff0f0; color: #a52a2a; }
+@media (max-width: 800px) { .cart-layout { grid-template-columns: 1fr; } }
+@media (max-width: 480px) {
+    header { padding: 15px 5%; }
+    nav { gap: 12px; }
+    nav a { font-size: 12px; }
+    main { width: 94%; margin-top: 25px; }
+    .panel { padding: 16px; }
+    .cart-item { grid-template-columns: 58px minmax(90px,1fr); gap: 11px; }
+    .product-emoji { width: 58px; height: 58px; font-size: 30px; }
+    .item-actions {
+        grid-column: 2; display: flex; justify-content: space-between;
+        align-items: center; text-align: left;
+    }
+    .item-total { margin-bottom: 0; }
+    .page-heading h1 { font-size: 26px; }
+}
+</style>
+</head>
+
+<body>
+<header>
+    <a class="logo" href="index.html">Shesuma<span>Mart</span></a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="product.html">Products</a>
+        <a class="active" href="cart.html">Cart 🛒</a>
+        <a href="orders.html">My Orders</a>
+        <a href="login.html">Login</a>
+    </nav>
+</header>
+
+<main>
+    <div class="page-heading">
+        <h1>My Shopping Cart 🛒</h1>
+        <p>Fresh groceries, delivered with care.</p>
+    </div>
+    <div id="notice" class="notice"></div>
+    <div id="cartContent"></div>
+</main>
+
+<footer>© 2026 ShesumaMart. Fresh groceries for your family.</footer>
+
+<script>
+const CART_KEY = "shesumaMartCart";
+
+function getCart() {
+    try {
+        const cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+        return Array.isArray(cart) ? cart : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function saveCart(cart) {
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+}
+
+function money(amount) {
+    return "₹" + Number(amount || 0).toFixed(2);
+}
+
+function getItemId(item) {
+    return String(item.id ?? item.name);
+}
+
+function getQuantity(item) {
+    const quantity = Number(item.quantity);
+    return Number.isFinite(quantity) && quantity > 0 ? Math.floor(quantity) : 1;
+}
+
+function getPrice(item) {
+    const price = Number(item.price);
+    return Number.isFinite(price) && price >= 0 ? price : 0;
+}
+
+function getCartTotal(cart) {
+    return cart.reduce((sum, item) => sum + getPrice(item) * getQuantity(item), 0);
+}
+
+function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;",
+        '"': "&quot;", "'": "&#39;"
+    })[character]);
+}
+
+function showNotice(message, type) {
+    const notice = document.getElementById("notice");
+    notice.textContent = message;
+    notice.className = "notice " + type;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function changeQuantity(id, change) {
+    const cart = getCart();
+    const item = cart.find(product => getItemId(product) === id);
+    if (!item) return;
+
+    const nextQuantity = getQuantity(item) + change;
+    if (nextQuantity < 1) {
+        removeItem(id);
+        return;
+    }
+
+    item.quantity = nextQuantity;
+    saveCart(cart);
+    renderCart();
+}
+
+function removeItem(id) {
+    saveCart(getCart().filter(item => getItemId(item) !== id));
+    renderCart();
+    showNotice("Item removed from your cart.", "success");
+}
+
+function renderCart() {
+    const cart = getCart();
+    const container = document.getElementById("cartContent");
+
+    if (cart.length === 0) {
+        container.innerHTML = `
+            <section class="panel empty-cart">
+                <div class="empty-icon">🛒</div>
+                <h2>Your cart is empty</h2>
+                <p>You haven't added any groceries yet.<br>
+                Explore our products and fill your basket!</p>
+                <a class="primary-btn" href="product.html">Shop Groceries</a>
+            </section>`;
+        return;
+    }
+
+    const subtotal = getCartTotal(cart);
+    const delivery = subtotal >= 499 ? 0 : 30;
+    const total = subtotal + delivery;
+
+    const itemsHTML = cart.map(item => {
+        const id = getItemId(item);
+        const quantity = getQuantity(item);
+        const price = getPrice(item);
+        const name = String(item.name || "Grocery Item");
+        const emoji = String(item.emoji || "🛒");
+        const unit = String(item.unit || "per item");
+
+        return `
+            <article class="cart-item">
+                <div class="product-emoji">${escapeHTML(emoji)}</div>
+                <div>
+                    <div class="product-name">${escapeHTML(name)}</div>
+                    <div class="product-unit">${escapeHTML(unit)}</div>
+                    <div class="product-price">${money(price)}</div>
+                    <div class="quantity-controls">
+                        <button type="button" aria-label="Decrease quantity"
+                            onclick="changeQuantity(${JSON.stringify(id)}, -1)">−</button>
+                        <span class="quantity-value">${quantity}</span>
+                        <button type="button" aria-label="Increase quantity"
+                            onclick="changeQuantity(${JSON.stringify(id)}, 1)">+</button>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <div class="item-total">${money(price * quantity)}</div>
+                    <button class="remove-btn" type="button"
+                        onclick="removeItem(${JSON.stringify(id)})">Remove</button>
+                </div>
+            </article>`;
+    }).join("");
+
+    container.innerHTML = `
+        <div class="cart-layout">
+            <section class="panel">
+                <h2>Cart Items (${cart.reduce((sum, item) => sum + getQuantity(item), 0)})</h2>
+                ${itemsHTML}
+                <a class="secondary-btn" href="product.html">← Continue Shopping</a>
+            </section>
+            <aside class="panel">
+                <form class="checkout-form" id="checkoutForm">
+                    <h2>Delivery Details</h2>
+                    <div class="form-field">
+                        <label for="customerName">Full Name *</label>
+                        <input id="customerName" name="customerName" type="text" autocomplete="name" required maxlength="80" placeholder="Enter your name">
+                    </div>
+                    <div class="form-field">
+                        <label for="customerPhone">Phone Number *</label>
+                        <input id="customerPhone" name="customerPhone" type="tel" inputmode="numeric" autocomplete="tel" pattern="[0-9]{10}" required maxlength="10" placeholder="10-digit phone number" title="Enter a 10-digit phone number">
+                    </div>
+                    <div class="form-field">
+                        <label for="customerAddress">Delivery Address *</label>
+                        <textarea id="customerAddress" name="customerAddress" autocomplete="street-address" required maxlength="300" placeholder="House number, street, area"></textarea>
+                    </div>
+                    <div class="form-field">
+                        <label for="customerPincode">PIN Code *</label>
+                        <input id="customerPincode" name="customerPincode" type="text" inputmode="numeric" autocomplete="postal-code" pattern="[0-9]{6}" required maxlength="6" placeholder="6-digit PIN code" title="Enter a 6-digit PIN code">
+                    </div>
+                    <div class="form-field">
+                        <label for="paymentMode">Payment Mode *</label>
+                        <select id="paymentMode" name="paymentMode" required>
+                            <option value="" selected disabled>Select payment mode</option>
+                            <option value="Cash on Delivery">Cash on Delivery</option>
+                            <option value="UPI (Demo only)">UPI (Demo only — no online payment is processed)</option>
+                        </select>
+                    </div>
+                </form>
+                <h2>Order Summary</h2>
+                <div class="summary-row"><span>Subtotal</span><span>${money(subtotal)}</span></div>
+                <div class="summary-row"><span>Delivery Fee</span><span>${delivery === 0 ? "FREE" : money(delivery)}</span></div>
+                <div class="delivery-note">
+                    ${delivery === 0
+                        ? "🎉 Your order qualifies for free delivery!"
+                        : "Add " + money(499 - subtotal) + " more to get free delivery."}
+                </div>
+                <div class="summary-row total"><span>Total</span><strong>${money(total)}</strong></div>
+                <button class="primary-btn" id="placeOrderBtn" type="button"
+                    onclick="placeDemoOrder()">Place Order</button>
+            </aside>
+        </div>`;
+}
+
+async function placeDemoOrder() {
+    const cart = getCart();
+    const form = document.getElementById("checkoutForm");
+
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+
+    const deliveryDetails = {
+        customerName: document.getElementById("customerName").value.trim(),
+        customerPhone: document.getElementById("customerPhone").value.trim(),
+        customerAddress: document.getElementById("customerAddress").value.trim(),
+        customerPincode: document.getElementById("customerPincode").value.trim(),
+        paymentMode: document.getElementById("paymentMode").value
+    };
+
+    if (cart.length === 0) {
+        showNotice("Your cart is empty. Add groceries first.", "error");
+        return;
+    }
+
+    const button = document.getElementById("placeOrderBtn");
+    button.disabled = true;
+    button.textContent = "Placing Order...";
+
+    try {
+        const response = await fetch("api/v1/orders", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "same-origin",
+            body: JSON.stringify({
+                ...deliveryDetails,
+                items: cart.map(item => ({
+                    name: String(item.name || "").trim(),
+                    quantity: getQuantity(item)
+                }))
+            })
+        });
+
+        let result;
+        try {
+            result = await response.json();
+        } catch (e) {
+            throw new Error("Server response puriyala. Please try again.");
+        }
+
+        if (!response.ok || result.success !== true) {
+            if (response.status === 401) {
+                throw new Error("Please login before placing an order.");
+            }
+            throw new Error(result.message || "Order failed. Please try again.");
+        }
+
+        localStorage.setItem("shesumaMartLastDeliveryDetails", JSON.stringify(deliveryDetails));
+        saveCart([]);
+        alert("Order placed successfully! Order ID: " + result.orderId);
+        window.location.href = "orders.html";
+
+    } catch (error) {
+        showNotice(error.message || "Unable to place your order. Check your connection.", "error");
+        button.disabled = false;
+        button.textContent = "Place Order";
+    }
+}
+
+renderCart();
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | ShesumaMart</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="auth-page">
+
+<div class="auth-card">
+    <a class="brand" href="login.html">🛒 Shesuma<span>Mart</span></a>
+    <p class="eyebrow">WELCOME BACK</p>
+    <h1>Login to your account</h1>
+
+    <form id="loginForm">
+        <label>Email
+            <input id="email" type="email" required
+                   placeholder="you@example.com">
+        </label>
+
+        <label>Password
+            <input id="password" type="password" required
+                   placeholder="Enter your password">
+        </label>
+
+        <button class="primary-btn full" id="loginButton" type="submit">
+            Login
+        </button>
+    </form>
+
+    <p class="muted">
+        New here? <a href="register.html">Create an account</a>
+    </p>
+
+    <p id="loginMessage" class="message" role="status"></p>
+</div>
+
+
+           <script src="login.js"></script>
+
+</body>
+</html>

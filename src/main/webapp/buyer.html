@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buyer Dashboard | ShesumaMart</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7f4;
+            color: #203528;
+        }
+        header {
+            background: #28784b;
+            color: white;
+            padding: 18px 24px;
+        }
+        nav {
+            background: white;
+            padding: 16px 24px;
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+        a {
+            color: #28784b;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        main {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            padding: 22px;
+            margin: 16px 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px #00000010;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ShesumaMart</h1>
+        <p>Buyer Dashboard</p>
+    </header>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="product.html">Products</a>
+        <a href="cart.html">Cart</a>
+        <a href="orders.html">My Orders</a>
+        <a href="dashboard.html">Dashboard</a>
+    </nav>
+
+    <main>
+        <h2>Welcome, Buyer!</h2>
+
+        <div class="card">
+            <h3>Shop Groceries</h3>
+            <p>Browse groceries and add your favourite items to your cart.</p>
+            <a href="product.html">Explore Products →</a>
+        </div>
+
+        <div class="card">
+            <h3>My Cart</h3>
+            <p>View your selected products and checkout.</p>
+            <a href="cart.html">Open Cart →</a>
+        </div>
+
+        <div class="card">
+            <h3>My Orders</h3>
+            <p>View your order history and status.</p>
+            <a href="orders.html">View Orders →</a>
+        </div>
+    </main>
+</body>
+</html>

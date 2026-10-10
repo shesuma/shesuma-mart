@@ -1,0 +1,8 @@
+target/
+*.mv.db
+*.trace.db
+*.log
+.env
+
+src/main/webapp/cart.html.bak
+src/main/webapp/cart.html.html

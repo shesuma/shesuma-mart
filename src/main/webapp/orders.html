@@ -1,0 +1,424 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | ShesumaMart</title>
+    <style>
+        :root {
+            --green: #28784b;
+            --dark-green: #1d5938;
+            --orange: #e28b28;
+            --bg: #f5f8f5;
+            --text: #243329;
+            --muted: #68766c;
+            --border: #e2e9e3;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 18px 6%;
+            background: white;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand {
+            color: var(--green);
+            font-size: 23px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        .links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .links a:hover { color: var(--green); }
+
+        main {
+            width: min(1000px, 92%);
+            margin: 35px auto;
+        }
+
+        h1 { margin-bottom: 8px; }
+
+        .subtitle {
+            color: var(--muted);
+            margin-bottom: 25px;
+        }
+
+        .notice {
+            padding: 14px 16px;
+            margin: 18px 0;
+            border-radius: 10px;
+            background: #fff4df;
+            color: #80520b;
+            overflow-wrap: anywhere;
+        }
+
+        .notice.error {
+            background: #fdeaea;
+            color: #9d2424;
+        }
+
+        .notice.success {
+            background: #e7f6eb;
+            color: #21653a;
+        }
+
+        .order-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 22px;
+            margin: 18px 0;
+            box-shadow: 0 4px 14px rgba(20, 50, 25, 0.04);
+        }
+
+        .order-head {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .order-id {
+            font-size: 17px;
+            font-weight: 800;
+            overflow-wrap: anywhere;
+        }
+
+        .date {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 7px;
+        }
+
+        .status {
+            display: inline-block;
+            align-self: flex-start;
+            padding: 7px 12px;
+            border-radius: 20px;
+            background: #fff2d9;
+            color: #8b5a0a;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .status.delivered {
+            background: #e2f5e8;
+            color: #21653a;
+        }
+
+        .status.cancelled {
+            background: #fde7e7;
+            color: #a32a2a;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #edf1ed;
+        }
+
+        .item-name { font-weight: 700; }
+
+        .item-meta {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .item-price {
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 18px;
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .empty {
+            padding: 45px 20px;
+            text-align: center;
+            background: white;
+            border-radius: 15px;
+            border: 1px solid var(--border);
+        }
+
+        .empty-icon { font-size: 42px; }
+
+        .btn {
+            display: inline-block;
+            border: 0;
+            border-radius: 8px;
+            background: var(--green);
+            color: white;
+            padding: 11px 16px;
+            margin-top: 20px;
+            text-decoration: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn:hover { background: var(--dark-green); }
+
+        footer {
+            padding: 24px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            nav { padding: 16px 4%; }
+            .links { gap: 12px; font-size: 13px; }
+            main { margin-top: 25px; }
+            .order-card { padding: 16px; }
+        }
+    </style>
+</head>
+
+<body>
+<nav>
+    <a class="brand" href="index.html">🛒 ShesumaMart</a>
+    <div class="links">
+        <a href="index.html">Home</a>
+        <a href="product.html">Groceries</a>
+        <a href="cart.html">Cart</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="login.html" id="logoutLink">Logout</a>
+    </div>
+</nav>
+
+<main>
+    <h1>My Orders 📦</h1>
+    <p class="subtitle">Track your grocery orders and review your purchases.</p>
+
+    <div id="message" role="status" aria-live="polite"></div>
+    <div id="ordersContainer">
+        <div class="empty">Loading your orders...</div>
+    </div>
+</main>
+
+<footer>© 2026 ShesumaMart · Fresh Groceries, Everyday</footer>
+
+<script>
+"use strict";
+
+const contextPath = "/shesumamart";
+const apiUrl = contextPath + "/api/v1/orders";
+
+const messageBox = document.getElementById("message");
+const ordersContainer = document.getElementById("ordersContainer");
+
+function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
+
+function money(value) {
+    const amount = Number(value);
+    return "₹" + (Number.isFinite(amount) ? amount : 0).toFixed(2);
+}
+
+function formatDate(value) {
+    if (!value) return "Date unavailable";
+    const date = new Date(value);
+    return Number.isNaN(date.getTime())
+        ? escapeHtml(value)
+        : date.toLocaleString("en-IN");
+}
+
+function showMessage(text, type) {
+    messageBox.innerHTML = text
+        ? '<div class="notice ' + (type || "") + '">' +
+          escapeHtml(text) + '</div>'
+        : "";
+}
+
+function statusClass(status) {
+    const s = String(status || "").toLowerCase();
+    if (s.includes("deliver")) return "delivered";
+    if (s.includes("cancel")) return "cancelled";
+    return "";
+}
+
+function renderOrder(order) {
+    const id = order.id ?? order.orderId ?? order.order_id ?? "N/A";
+    const status = order.status ?? "PENDING";
+    const items = Array.isArray(order.items) ? order.items : [];
+
+    const itemHtml = items.length
+        ? items.map(item => {
+            const name = item.name ?? item.productName ??
+                         item.product_name ?? "Grocery item";
+            const quantity = Number(item.quantity ?? 1);
+            const price = Number(item.price ?? item.unitPrice ??
+                                 item.unit_price ?? 0);
+            const lineTotal = item.subtotal != null
+                ? Number(item.subtotal)
+                : price * quantity;
+
+            return `
+                <div class="item">
+                    <div>
+                        <div class="item-name">🛒 ${escapeHtml(name)}</div>
+                        <div class="item-meta">
+                            ${money(price)} × ${escapeHtml(quantity)}
+                        </div>
+                    </div>
+                    <div class="item-price">${money(lineTotal)}</div>
+                </div>`;
+        }).join("")
+        : `<div class="item">
+               <div class="item-meta">
+                   No grocery items were returned for this order.
+               </div>
+           </div>`;
+
+    const total = order.total ?? order.totalAmount ??
+                  order.total_amount ?? 0;
+
+    return `
+        <article class="order-card">
+            <div class="order-head">
+                <div>
+                    <div class="order-id">Order #${escapeHtml(id)}</div>
+                    <div class="date">Date: ${formatDate(
+                        order.date ?? order.createdAt ?? order.created_at
+                    )}</div>
+                </div>
+                <span class="status ${statusClass(status)}">
+                    ${escapeHtml(status)}
+                </span>
+            </div>
+            <div>${itemHtml}</div>
+            <div class="order-total">
+                <span>Order Total</span>
+                <span>${money(total)}</span>
+            </div>
+        </article>`;
+}
+
+async function loadOrders() {
+    ordersContainer.innerHTML =
+        '<div class="empty">Loading your orders...</div>';
+    showMessage("");
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: "GET",
+            credentials: "same-origin",
+            headers: { "Accept": "application/json" },
+            cache: "no-store"
+        });
+
+        let data;
+        try {
+            data = await response.json();
+        } catch {
+            throw new Error(
+                "Server returned an invalid response. Check Tomcat logs."
+            );
+        }
+
+        if (response.status === 401) {
+            ordersContainer.innerHTML = `
+                <div class="empty">
+                    <div class="empty-icon">🔐</div>
+                    <h2>Please log in</h2>
+                    <p>Login to view orders saved to your account.</p>
+                    <a class="btn" href="login.html">Login</a>
+                </div>`;
+            return;
+        }
+
+        if (!response.ok || data.success === false) {
+            throw new Error(data.message || "Unable to load orders.");
+        }
+
+        const orders = Array.isArray(data)
+            ? data
+            : Array.isArray(data.orders) ? data.orders : null;
+
+        if (!orders) {
+            throw new Error(
+                "Orders response format is unexpected. Check the API response."
+            );
+        }
+
+        if (orders.length === 0) {
+            ordersContainer.innerHTML = `
+                <div class="empty">
+                    <div class="empty-icon">📦</div>
+                    <h2>No database orders yet</h2>
+                    <p>Your successfully placed orders will appear here.</p>
+                    <a class="btn" href="product.html">Shop Groceries</a>
+                </div>`;
+            return;
+        }
+
+        ordersContainer.innerHTML = orders.map(renderOrder).join("");
+        showMessage("Orders loaded from the Java backend.", "success");
+
+    } catch (error) {
+        ordersContainer.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">⚠️</div>
+                <h2>Could not load orders</h2>
+                <p>${escapeHtml(error.message || "Unknown error")}</p>
+                <button class="btn" onclick="loadOrders()">Try Again</button>
+            </div>`;
+        showMessage(
+            "Database orders could not be loaded. Make sure Tomcat is running and you are logged in.",
+            "error"
+        );
+    }
+}
+
+document.getElementById("logoutLink").addEventListener("click", function(event) {
+    // Keep your existing login page link. This does not delete saved orders.
+});
+
+loadOrders();
+</script>
+</body>
+</html>
+
